@@ -1,0 +1,93 @@
+{
+	"info": {
+		"_postman_id": "7df435d1-6447-406e-b519-a718a9a59d31",
+		"name": "YouTube Downloader Python",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Download MP3 (NoCopyrightSounds)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"url\": \"https://www.youtube.com/watch?v=K4DyBUG242c\",\n    \"format\": \"mp3\",\n    \"is_playlist\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/download",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"download"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Download MP4 (Blender Open Movie)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"url\": \"https://www.youtube.com/watch?v=WhWc3b3KqzY\",\n    \"format\": \"mp4\",\n    \"is_playlist\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/download",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"download"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Download Playlist (NCS Releases)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"url\": \"https://www.youtube.com/playlist?list=PLRBp0Fe2Gpgm0WF6DEGmb7ab4qHAGlPzQ\",\n    \"format\": \"mp3\",\n    \"is_playlist\": true,\n    \"output_dir\": \"./playlist_ncs\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/download",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"download"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
