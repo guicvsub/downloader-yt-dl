@@ -2,7 +2,7 @@
 
 Um aplicativo completo (Full-Stack) para download de vídeos, áudios e playlists do YouTube com qualidade máxima, organização automática de pastas e uma interface de usuário moderna e fluida.
 
-Este projeto substitui a antiga implementação em Golang por uma arquitetura robusta em **Python (Flask)** combinada com um frontend moderno em **React (Vite)**.
+Este projeto substitui a antiga implementação em Golang por uma arquitetura robusta em **Python (Flask)** combinada com um frontend moderno em **React (Vite)** encapsulado como um aplicativo Desktop multiplataforma utilizando o **Tauri**.
 
 ## ✨ Funcionalidades Principais
 
@@ -19,6 +19,7 @@ Este projeto substitui a antiga implementação em Golang por uma arquitetura ro
 * React.js (via Vite)
 * CSS Vanilla (Design Customizado)
 * Fetch API nativa para SSE
+* **Tauri** (Para execução e build do aplicativo Desktop)
 
 **Backend:**
 * Python 3
@@ -31,6 +32,7 @@ Este projeto substitui a antiga implementação em Golang por uma arquitetura ro
 ### Pré-requisitos
 * Node.js (Para o frontend React/Vite)
 * Python 3.8+ (Para o backend)
+* Rust e dependências do C++ (Obrigatórios para o Tauri compilar o aplicativo Desktop)
 * FFmpeg instalado e adicionado às variáveis de ambiente (ou configurado no arquivo `downloader_service.py`).
 
 ### 1. Backend (Python/Flask)
@@ -48,16 +50,18 @@ python app.py
 ```
 O backend estará rodando na porta `http://localhost:8080`.
 
-### 2. Frontend (React/Vite)
+### 2. Frontend (Aplicativo Desktop com Tauri)
 Abra um novo terminal na pasta `frontend`:
 ```bash
 # Instale as dependências do Node
 npm install
 
-# Inicie o servidor de desenvolvimento
-npm run dev
+# Inicie o aplicativo em modo de desenvolvimento (abrirá a janela do Tauri)
+npm run tauri dev
+
+# Para fazer o build final do executável (.exe, .app, .deb)
+npm run tauri build
 ```
-Acesse a aplicação no navegador em `http://localhost:5173`.
 
 ## 🤝 Contribuição
 Sinta-se à vontade para fazer um fork, abrir issues ou enviar Pull Requests! Melhorias no design, refatorações ou novos extratores de vídeo são muito bem-vindos.
