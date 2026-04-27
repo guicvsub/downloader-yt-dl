@@ -3,6 +3,7 @@ import threading
 import time
 import json
 from flask import Blueprint, request, jsonify, Response, stream_with_context
+from extract_info import extract_media_info
 
 progress_store = {}
 
@@ -99,5 +100,15 @@ def create_api_blueprint(service):
                     break
                 time.sleep(0.5)
         return Response(stream_with_context(generate()), mimetype='text/event-stream')
+
+    @api.route('/info', methods=['GET'])
+    def get_info():
+        url = request.args.get('url')
+        if not url:
+            return jsonify({'success': False, 'error': 'URL não fornecida'}), 400
+            
+        # extract_media_info retorna uma string JSON
+        result_json = extract_media_info(url)
+        return Response(result_json, mimetype='application/json')
 
     return api

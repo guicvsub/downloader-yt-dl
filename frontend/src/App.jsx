@@ -8,6 +8,8 @@ function App() {
   const [isPlaylist, setIsPlaylist] = useState(false)
   const [status, setStatus] = useState({ type: '', message: '' })
   const [loading, setLoading] = useState(false)
+  const [mediaInfo, setMediaInfo] = useState(null)
+  const [isFetchingInfo, setIsFetchingInfo] = useState(false)
   
   // Progress states
   const [progress, setProgress] = useState(0)
@@ -61,6 +63,33 @@ function App() {
       eventSource.close();
     };
   }, [taskId]);
+
+  const handleBlur = async () => {
+    if (!url) {
+      setMediaInfo(null)
+      return
+    }
+    
+    setIsFetchingInfo(true)
+    try {
+      const response = await fetch(`http://localhost:8080/info?url=${encodeURIComponent(url)}`)
+      const data = await response.json()
+      if (data.success && data.data) {
+        setMediaInfo(data.data)
+        // Auto ativa modo playlist se for uma playlist
+        if (data.data.type === 'playlist') {
+          setIsPlaylist(true)
+        }
+      } else {
+        setMediaInfo(null)
+      }
+    } catch (err) {
+      console.error("Erro ao buscar info", err)
+      setMediaInfo(null)
+    } finally {
+      setIsFetchingInfo(false)
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -160,16 +189,61 @@ function App() {
               placeholder="Cole o link do YouTube aqui..." 
               value={url}
               onChange={(e) => setUrl(e.target.value)}
+              onBlur={handleBlur}
               disabled={loading}
               autoFocus
             />
           </div>
         </div>
 
-        <div className="banner">
-          <h1>YT Downloader Premium</h1>
-          <p>Baixe vídeos, áudios e playlists com qualidade máxima.</p>
-        </div>
+        {!mediaInfo && !isFetchingInfo && (
+          <div className="banner">
+            <h1>YT Downloader Premium</h1>
+            <p>Baixe vídeos, áudios e playlists com qualidade máxima.</p>
+          </div>
+        )}
+
+        {isFetchingInfo && (
+          <div className="preview-container">
+             <div style={{ padding: '40px', color: 'var(--text-muted)' }}>Buscando informações da mídia...</div>
+          </div>
+        )}
+
+        {mediaInfo && !isFetchingInfo && (
+          <div className="preview-container">
+            <div className="flip-card">
+              <div className="flip-card-inner">
+                <div className="flip-card-front">
+                  {mediaInfo.thumbnail ? (
+                    <img src={mediaInfo.thumbnail} alt={mediaInfo.title || mediaInfo.playlist_name} />
+                  ) : (
+                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-sidebar-1)' }}>
+                      Sem Imagem
+                    </div>
+                  )}
+                  <div className="title-overlay">
+                    <h4>{mediaInfo.title || mediaInfo.playlist_name}</h4>
+                  </div>
+                </div>
+                <div className="flip-card-back">
+                  {mediaInfo.type === 'playlist' && (
+                    <div className="playlist-badge">PLAYLIST</div>
+                  )}
+                  
+                  <div className="info-stat">
+                    <span>{mediaInfo.type === 'playlist' ? 'Vídeos na Playlist' : 'Duração'}</span>
+                    <strong>
+                      {mediaInfo.type === 'playlist' 
+                        ? mediaInfo.video_count 
+                        : (mediaInfo.duration ? `${Math.floor(mediaInfo.duration / 60)}:${(mediaInfo.duration % 60).toString().padStart(2, '0')}` : '--:--')}
+                    </strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
 
         <form onSubmit={handleSubmit}>
           <div className="section">
