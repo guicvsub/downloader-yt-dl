@@ -4,6 +4,8 @@ backend/__pycache__/
 backend/downloads/
 backend/.env
 backend/instance/
+cookies.txt
+cokies.txt
 *.pyc
 
 # Frontend

@@ -13,10 +13,12 @@
     "windows": [
       {
         "title": "YouTube Downloader",
-        "width": 800,
-        "height": 600,
+        "width": 1100,
+        "height": 768,
         "resizable": true,
-        "fullscreen": false
+        "fullscreen": false,
+        "decorations": false,
+        "transparent": true
       }
     ],
     "security": {

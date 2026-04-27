@@ -58,8 +58,16 @@ class DownloaderService:
                 'format': 'best[ext=mp4]/best',
             })
 
-        # Resolvendo problema de runtime de JS
+        # Resolvendo problema de runtime de JS e desafios EJS do YouTube
         ydl_opts['js_runtimes'] = {'node': {}}
+        ydl_opts['remote_components'] = ['ejs:github']
+
+        ydl_opts['extractor_args'] = {
+            'youtube': {
+                'player_client': ['web', 'android'],
+                'skip': ['webpage', 'configs']
+            }
+        }
 
         # Novas tentativas de burlar o bloqueio do YouTube
         ydl_opts.update({
@@ -67,13 +75,11 @@ class DownloaderService:
             'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         })
 
-        # Simula clientes mobile e tenta forçar o cliente web
-        ydl_opts['extractor_args'] = {
-            'youtube': {
-                'player_client': ['android', 'ios', 'web'],
-                'skip': ['webpage', 'configs']
-            }
-        }
+        # Carrega cookies de um arquivo cookies.txt se ele existir na raiz do backend
+        cookies_file = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'cookies.txt'))
+        if os.path.exists(cookies_file):
+            ydl_opts['cookiefile'] = cookies_file
+
 
         if progress_hook:
             ydl_opts['progress_hooks'] = [progress_hook]
